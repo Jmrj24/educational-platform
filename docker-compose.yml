@@ -1,0 +1,29 @@
+services:
+  educational-platform:
+    build: educational-platform
+    mem_limit: 512m
+    ports:
+      - "8090:8090"
+    environment:
+      BD_URL: ${BD_URL}
+      BD_USER: ${BD_USER}
+      BD_PASSWORD: ${BD_PASSWORD}
+      APP_USER: ${APP_USER}      
+      APP_PASSWORD: ${APP_PASSWORD}      
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      USER_GENERATOR: ${USER_GENERATOR}
+    restart: always
+    depends_on:
+      service_educational_platform_bd:
+        condition: service_healthy
+  service_educational_platform_bd:
+    image: mysql:8.3.0 
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 10 
