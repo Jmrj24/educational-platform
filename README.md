@@ -5,19 +5,19 @@
 ## 📌 ¿Por qué hice este proyecto?
 Vengo de desarrollar una arquitectura de microservicios (puedes verla en mi repositorio `admin_tareas`). Aunque funcionaba bien, me di cuenta de que necesitaba **profundizar mucho más en la seguridad**.
 
-A veces, al dividir todo en microservicios, perdemos de vista lo básico. Por eso decidí "dar un paso atrás" hacia una arquitectura monolítica con este proyecto. Mi objetivo fue claro: **entender y aplicar Spring Security 6 desde adentro**, creando un sistema donde la seguridad no sea un parche, sino la base de todo.
+A veces, al dividir todo en microservicios, perdemos de vista lo básico. Por eso decidí "dar un paso atrás" hacia una arquitectura monolítica con este proyecto. Mi objetivo fue claro: **entender y aplicar Spring Security desde adentro**, creando un sistema donde la seguridad sea base.
 
 ## ⚙️ Stack Tecnológico
 Lo construí con las herramientas que busca el mercado actual:
 * **Java 17** y **Spring Boot 3.2**
-* **Seguridad:** Spring Security 6 + JWT (Tokens)
+* **Seguridad:** Spring Security + JWT (Tokens)
 * **Base de Datos:** MySQL + JPA (Hibernate)
 * **Manejo de Datos:** DTOs (usando Records) y Mappers manuales.
 
 ## 🏗️ Cómo está organizado (Arquitectura)
-No quería el típico "código espagueti" donde todo está mezclado. Organicé el código en capas claras para que sea fácil de mantener:
+Organicé el código en capas claras para que sea fácil de mantener:
 
-1.  **Capa de Seguridad (UserSec):** Maneja usuarios, roles y permisos. Está separada de la lógica del colegio.
+1.  **Capa de Seguridad:** Maneja usuarios, roles y permisos. Está separada de la lógica del colegio.
 2.  **Capa de Dominio (Student/Teacher):** Aquí vive la información académica.
 3.  **Capa de Aplicación (El "Coordinador"):**
     * *El problema:* Crear un estudiante implica guardar sus datos personales Y crearle un usuario para loguearse.
@@ -32,7 +32,7 @@ En lugar de usar la configuración por defecto, implementé controles más finos
 
 ## 🚀 Instalación y Despliegue
 
-Este proyecto sigue la metodología **Twelve-Factor App**, utilizando variables de entorno para una configuración segura y flexible.
+Este proyecto utiliza variables de entorno para una configuración segura y flexible.
 
 ### 📋 Pre-requisitos
 * **Opción Recomendada:** Docker y Docker Compose (Incluidos en el proyecto).
@@ -61,7 +61,7 @@ Este proyecto sigue la metodología **Twelve-Factor App**, utilizando variables 
     | `APP_USER` | **Username del primer Administrador** | Define un email/user (ej: `admin@mail.com`) | Igual |
     | `APP_PASSWORD` | **Password del primer Administrador** | Define una contraseña segura | Igual |
     | `PRIVATE_KEY` | Clave secreta para firmar JWT | Genera un string aleatorio largo | Igual |
-    | `USER_GENERATOR` | Emisor del Token (Issuer) | Ej: `SAS_API` | Igual |
+    | `USER_GENERATOR` | Emisor del Token | Ej: `SAS_API` | Igual |
 
     > 🐳 **Nota para Docker:** En `BD_URL`, asegúrate de que el host (ej: `mysql-container`) coincida con el nombre del servicio de base de datos definido en tu archivo `docker-compose.yml`.
 
