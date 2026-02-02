@@ -30,27 +30,57 @@ En lugar de usar la configuración por defecto, implementé controles más finos
 * **Todo cerrado por defecto:** Usé `denyAll()` en los controladores. Esto significa que si se me olvida configurar un endpoint, nadie puede entrar. Es una medida de seguridad preventiva.
 * **Errores Claros:** Si el token falla o no tienes permiso, el sistema no te devuelve una página HTML de error genérica. Te devuelve un JSON claro explicando qué pasó, gracias a mis excepciones personalizadas.
 
-## 🚀 Instalación y Ejecución
+## 🚀 Instalación y Despliegue
 
-**Requisitos:** Tener instalado Java 17, Maven y MySQL.
+Este proyecto sigue la metodología **Twelve-Factor App**, utilizando variables de entorno para una configuración segura y flexible.
 
-1.  **Clonar el proyecto:**
+### 📋 Pre-requisitos
+* **Opción Recomendada:** Docker y Docker Compose (Incluidos en el proyecto).
+* **Opción Manual:** Java 17, Maven y un servidor MySQL corriendo localmente.
+
+### ⚙️ Configuración (Paso Obligatorio)
+⚠️ **Importante:** El proyecto **no arrancará** si no realizas este paso, ya que no incluye credenciales por defecto.
+
+1.  **Clonar el repositorio:**
     ```bash
-    git clone [https://github.com/Jmrj24/educational-platform.git](https://github.com/Jmrj24/educational-platform.git)
+    git clone [https://github.com/Jmrj24/secure-academic-system.git](https://github.com/Jmrj24/secure-academic-system.git)
+    cd secure-academic-system
     ```
-2.  **Configurar la Base de Datos:**
-    Abre el archivo `src/main/resources/application.properties` y ajusta tus credenciales de MySQL:
-    ```properties
-    spring.datasource.url=jdbc:mysql://localhost:3306/db_school
-    spring.datasource.username=root
-    spring.datasource.password=tu_password
-    # Clave para firmar los Tokens (¡Cámbiala en producción!)
-    security.jwt.private.key=tu_clave_secreta_aqui
-    ```
-3.  **Correr la aplicación:**
+
+2.  **Crear archivo de entorno:**
+    Copia el archivo plantilla `.env.example` y renómbralo a `.env`:
     ```bash
-    mvn spring-boot:run
+    cp .env.example .env
     ```
+
+3.  **Definir Valores:**
+    Abre el archivo `.env` y completa las variables vacías según tu entorno:
+
+    | Variable | Descripción | Valor para DOCKER 🐳 | Valor para LOCAL 💻 |
+    | :--- | :--- | :--- | :--- |
+    | `MYSQL_ROOT_PASSWORD` | Contraseña root para inicializar MySQL | Define una contraseña (ej: `secret`) | (No aplica, usa tu MySQL local) |
+    | `BD_URL` | URL de conexión JDBC | `jdbc:mysql://mysql-container:3306/nombre_db`* | `jdbc:mysql://localhost:3306/nombre_db` |
+    | `BD_USER` | Usuario de la Base de Datos | `root` | Tu usuario local (ej: root) |
+    | `BD_PASSWORD` | Contraseña de la Base de Datos | La misma que `MYSQL_ROOT_PASSWORD` | Tu contraseña local |
+    | `APP_USER` | **Username del primer Administrador** | Define un email/user (ej: `admin@mail.com`) | Igual |
+    | `APP_PASSWORD` | **Password del primer Administrador** | Define una contraseña segura | Igual |
+    | `PRIVATE_KEY` | Clave secreta para firmar JWT | Genera un string aleatorio largo | Igual |
+    | `USER_GENERATOR` | Emisor del Token (Issuer) | Ej: `SAS_API` | Igual |
+
+    > 🐳 **Nota para Docker:** En `BD_URL`, asegúrate de que el host (ej: `mysql-container`) coincida con el nombre del servicio de base de datos definido en tu archivo `docker-compose.yml`.
+
+---
+
+### 🐳 Opción A: Ejecutar con Docker
+Docker Compose leerá el archivo `.env` automáticamente para levantar la BD y la App conectadas entre sí.
+
+```bash
+docker-compose up --build
+
+---
+
+### 🛠️ Opción B: Ejecución Manual
+Asegúrate de tener MySQL corriendo y que las credenciales en el .env coincidan con tu configuración local.
 
 ## 🧪 Cómo probarlo
 He incluido una colección de Postman.
