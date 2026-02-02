@@ -43,15 +43,11 @@ Este proyecto sigue la metodología **Twelve-Factor App**, utilizando variables 
 
 1.  **Clonar el repositorio:**
     ```bash
-    git clone [https://github.com/Jmrj24/educational-platform](https://github.com/Jmrj24/educational-platform)
-    cd secure-academic-system
+    git clone [https://github.com/Jmrj24/educational-platform]
     ```
 
 2.  **Crear archivo de entorno:**
-    Copia el archivo plantilla `.env.example` y renómbralo a `.env`:
-    ```bash
-    cp .env.example .env
-    ```
+    Copia el archivo plantilla `.env.example` y renómbralo a `.env`
 
 3.  **Definir Valores:**
     Abre el archivo `.env` y completa las variables vacías según tu entorno:
@@ -76,7 +72,7 @@ Docker Compose leerá el archivo `.env` automáticamente para levantar la BD y l
 
 ```bash
 docker-compose up --build
-
+```
 ---
 
 ### 🛠️ Opción B: Ejecución Manual
