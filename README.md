@@ -43,7 +43,7 @@ Este proyecto sigue la metodología **Twelve-Factor App**, utilizando variables 
 
 1.  **Clonar el repositorio:**
     ```bash
-    git clone [https://github.com/Jmrj24/secure-academic-system.git](https://github.com/Jmrj24/secure-academic-system.git)
+    git clone [https://github.com/Jmrj24/educational-platform](https://github.com/Jmrj24/educational-platform)
     cd secure-academic-system
     ```
 
