@@ -13,7 +13,7 @@ La documentación ha sido generada automáticamente con **OpenAPI (Swagger UI)**
 > El servidor está alojado en infraestructura de capa gratuita (Render/Railway). La primera petición puede tardar **50-60 segundos** en despertar el servicio. Por favor, ten paciencia.
 
 **¿Cómo probar los endpoints protegidos?**
-1. Usa el endpoint `POST /auth/login` para obtener un token (Usuario: `adminPlatform`, Password: 'admin1234').
+1. Usa el endpoint `POST /auth/login` para obtener un token (Usuario: `adminPlatform`, Password: `admin1234`).
 2. Copia el token `jwt` de la respuesta.
 3. Sube al inicio de la página y haz clic en el botón verde **Authorize** 🔓.
 4. Pega el token y confirma.
@@ -24,7 +24,7 @@ La documentación ha sido generada automáticamente con **OpenAPI (Swagger UI)**
 ## 📌 ¿Por qué hice este proyecto?
 Vengo de desarrollar una arquitectura de microservicios (puedes verla en mi repositorio `admin_tareas`). Aunque funcionaba bien, me di cuenta de que necesitaba **profundizar mucho más en la seguridad**.
 
-A veces, al dividir todo en microservicios, perdemos de vista lo básico. Por eso decidí "dar un paso atrás" hacia una arquitectura monolítica con este proyecto. Mi objetivo fue claro: **entender y aplicar Spring Security**, creando un sistema donde la seguridad sea la base.
+A veces, al dividir todo en microservicios, perdemos de vista lo básico. Por eso decidí "dar un paso atrás" hacia una arquitectura monolítica con este proyecto. Mi objetivo fue **entender y aplicar Spring Security**, creando un sistema donde la seguridad sea la base.
 
 ## 🛡️ Arquitectura de Seguridad
 La seguridad es el núcleo de este proyecto. Se implementó una estrategia **Stateless** basada en **JWT (JSON Web Tokens)**, eliminando el uso de sesiones de servidor para garantizar escalabilidad.
@@ -82,7 +82,7 @@ Organicé el código en capas claras para facilitar el mantenimiento y la escala
 ## 🧪 Pruebas de Integración (Postman)
 Si prefieres realizar pruebas manuales extensivas fuera del navegador, he preparado una colección completa que cubre todos los flujos de negocio.
 
-📂 **[Descargar Colección de Postman](./postman/educationalPlatform.postman_collection.json)** (Asegúrate de tener esta carpeta en tu repo)
+📂 **[Descargar Colección de Postman](./Postman/educationalPlatform.postman_collection.json)** (Asegúrate de tener esta carpeta en tu repo)
 
 **Escenarios incluidos:**
 - ✅ Flujo completo de Autenticación.
@@ -120,6 +120,8 @@ Este proyecto utiliza variables de entorno para una configuración segura.
     | `APP_PASSWORD` | **Password del primer Administrador** | Define una contraseña segura | Igual |
     | `PRIVATE_KEY` | Firma JWT | String aleatorio seguro | Igual |
     | `USER_GENERATOR` | Emisor del Token | Ej: `SAS_API` | Igual |
+
+> 🐳 **Nota para Docker:** En `BD_URL`, asegúrate de que el host (ej: `mysql-container`) coincida con el nombre del servicio de base de datos definido en tu archivo `docker-compose.yml`.
 
 ### 🐳 Opción A: Ejecutar con Docker (Recomendado)
 Docker Compose leerá el archivo `.env` automáticamente.
