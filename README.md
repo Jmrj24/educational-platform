@@ -13,8 +13,8 @@ La documentación ha sido generada automáticamente con **OpenAPI (Swagger UI)**
 > El servidor está alojado en infraestructura de capa gratuita (Render/Railway). La primera petición puede tardar **50-60 segundos** en despertar el servicio. Por favor, ten paciencia.
 
 **¿Cómo probar los endpoints protegidos?**
-1. Usa el endpoint `POST /auth/login` para obtener un token (Usuario: `admin@mail.com` o el que definiste).
-2. Copia el token `access_token` de la respuesta.
+1. Usa el endpoint `POST /auth/login` para obtener un token (Usuario: `adminPlatform`, Password: 'admin1234').
+2. Copia el token `jwt` de la respuesta.
 3. Sube al inicio de la página y haz clic en el botón verde **Authorize** 🔓.
 4. Pega el token y confirma.
 5. ¡Listo! El candado se cerrará 🔒 y podrás probar endpoints seguros como `GET /students`.
@@ -24,7 +24,7 @@ La documentación ha sido generada automáticamente con **OpenAPI (Swagger UI)**
 ## 📌 ¿Por qué hice este proyecto?
 Vengo de desarrollar una arquitectura de microservicios (puedes verla en mi repositorio `admin_tareas`). Aunque funcionaba bien, me di cuenta de que necesitaba **profundizar mucho más en la seguridad**.
 
-A veces, al dividir todo en microservicios, perdemos de vista lo básico. Por eso decidí "dar un paso atrás" hacia una arquitectura monolítica con este proyecto. Mi objetivo fue claro: **entender y aplicar Spring Security desde adentro**, creando un sistema donde la seguridad sea la base y no un agregado final.
+A veces, al dividir todo en microservicios, perdemos de vista lo básico. Por eso decidí "dar un paso atrás" hacia una arquitectura monolítica con este proyecto. Mi objetivo fue claro: **entender y aplicar Spring Security**, creando un sistema donde la seguridad sea la base.
 
 ## 🛡️ Arquitectura de Seguridad
 La seguridad es el núcleo de este proyecto. Se implementó una estrategia **Stateless** basada en **JWT (JSON Web Tokens)**, eliminando el uso de sesiones de servidor para garantizar escalabilidad.
@@ -72,7 +72,7 @@ Lo construí con las herramientas estándar del mercado actual:
 Organicé el código en capas claras para facilitar el mantenimiento y la escalabilidad:
 
 1.  **Capa de Seguridad:** Maneja usuarios, roles y permisos. Totalmente desacoplada de la lógica de negocio académica.
-2.  **Capa de Dominio (Student/Teacher):** Aquí reside la lógica y entidades del negocio.
+2.  **Capa de Dominio (Student/Teacher/Course):** Aquí reside la lógica y entidades del negocio.
 3.  **Capa de Aplicación (Orquestación):**
     * *El reto:* Crear un estudiante implica persistir datos académicos Y crear credenciales de acceso.
     * *La solución:* Servicios orquestadores (como `CreateStudentAccount`) que coordinan ambas operaciones bajo una única transacción (`@Transactional`). Si falla la creación del usuario, se revierte el registro del estudiante.
