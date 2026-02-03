@@ -135,7 +135,7 @@ Este proyecto utiliza variables de entorno para una configuración segura.
 
 1.  **Clonar el repositorio:**
     ```bash
-    git clone [https://github.com/Jmrj24/educational-platform.git](https://github.com/Jmrj24/educational-platform.git)
+    git clone [https://github.com/Jmrj24/educational-platform.git]
     ```
 
 2.  **Configurar Entorno:**
