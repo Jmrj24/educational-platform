@@ -51,11 +51,11 @@ La seguridad se configuró para cumplir estrictamente con estos niveles de acces
 | 👨‍🏫 **TEACHER** | **Lectura Amplia:** Puede consultar la información de Cursos, Profesores y Estudiantes. *(Lógica preparada para edición de cursos propios).* |
 | 🎓 **STUDENT** | **Lectura Limitada:** Solo tiene permiso para visualizar los Cursos disponibles y el listado de Estudiantes. |
 
-### 🔄 Inicialización Automática (Data Seeding)
+### 🔄 Inicialización Automática
 Para facilitar el despliegue y las pruebas, el sistema incluye un componente **Bootstrap** (`CommandLineRunner`).
 * **Lógica:** Al arrancar la aplicación, el sistema verifica si la tabla de usuarios está vacía.
-* **Acción:** Si no hay usuarios, crea automáticamente el primer **Admin** utilizando las credenciales seguras definidas en el archivo `.env`.
-* **Beneficio:** Permite que el entorno esté operativo inmediatamente después del despliegue (`Plug & Play`), sin necesidad de ejecutar scripts SQL manuales para insertar el primer usuario.
+* **Acción:** Si no hay usuarios, crea automáticamente el primer **Administrador** utilizando las credenciales seguras definidas en el archivo `.env`.
+* **Beneficio:** Permite que el entorno esté operativo inmediatamente después del despliegue, sin necesidad de ejecutar scripts SQL manuales para insertar el primer usuario.
 
 ## 🛡️ Arquitectura de Seguridad
 La seguridad es el núcleo de este proyecto. Se implementó una estrategia **Stateless** basada en **JWT (JSON Web Tokens)**, eliminando el uso de sesiones de servidor para garantizar escalabilidad.
@@ -111,7 +111,7 @@ Organicé el código en capas claras para facilitar el mantenimiento y la escala
 ---
 
 ## 🧪 Pruebas de Integración (Postman)
-Si prefieres realizar pruebas manuales extensivas fuera del navegador, he preparado una colección completa que cubre todos los flujos de negocio.
+Si prefieres realizar pruebas manuales fuera del navegador, preparé una colección completa que cubre todos los flujos de negocio.
 
 📂 **[Descargar Colección de Postman](./Postman/educationalPlatform.postman_collection.json)** (Asegúrate de tener esta carpeta en tu repo)
 
