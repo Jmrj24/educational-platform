@@ -119,6 +119,7 @@ Si prefieres realizar pruebas manuales fuera del navegador, preparé una colecci
 - ✅ Flujo completo de Autenticación.
 - ✅ Gestión de Estudiantes (CRUD completo con validaciones).
 - ✅ Asignación de Permisos y Roles.
+- ✅ Flujos de error controlados.
 
 ---
 
