@@ -26,6 +26,37 @@ Vengo de desarrollar una arquitectura de microservicios (puedes verla en mi repo
 
 A veces, al dividir todo en microservicios, perdemos de vista lo básico. Por eso decidí "dar un paso atrás" hacia una arquitectura monolítica con este proyecto. Mi objetivo fue **entender y aplicar Spring Security**, creando un sistema donde la seguridad sea la base.
 
+## 🏫 Funcionalidades y Lógica de Negocio
+
+El sistema cumple con las siguientes reglas de negocio y relaciones de datos:
+
+### 1. Modelado de Entidades
+Se diseñó la arquitectura (Controladores, Servicios y Repositorios) para gestionar tres entidades principales con las siguientes relaciones:
+* **Cursos:** Cada curso tiene una lista de alumnos inscritos y **un solo profesor** asignado.
+* **Profesores:** Un profesor tiene la capacidad de impartir **más de un curso**.
+* **Estudiantes:** Un alumno puede estar inscrito en **uno o varios cursos** simultáneamente.
+
+### 2. Gestión de Recursos (CRUD)
+Se implementaron todos los endpoints necesarios para el manejo completo (Crear, Leer, Actualizar, Eliminar) de:
+* ✅ Estudiantes
+* ✅ Profesores
+* ✅ Cursos
+
+### 3. Matriz de Permisos y Seguridad
+La seguridad se configuró para cumplir estrictamente con estos niveles de acceso:
+
+| ROL | Permisos |
+| :--- | :--- |
+| 🛡️ **ADMIN** | **Control Total:** Puede realizar operaciones CRUD sobre todas las entidades (Cursos, Profesores y Estudiantes). |
+| 👨‍🏫 **TEACHER** | **Lectura Amplia:** Puede consultar la información de Cursos, Profesores y Estudiantes. *(Lógica preparada para edición de cursos propios).* |
+| 🎓 **STUDENT** | **Lectura Limitada:** Solo tiene permiso para visualizar los Cursos disponibles y el listado de Estudiantes. |
+
+### 🔄 Inicialización Automática (Data Seeding)
+Para facilitar el despliegue y las pruebas, el sistema incluye un componente **Bootstrap** (`CommandLineRunner`).
+* **Lógica:** Al arrancar la aplicación, el sistema verifica si la tabla de usuarios está vacía.
+* **Acción:** Si no hay usuarios, crea automáticamente el primer **Admin** utilizando las credenciales seguras definidas en el archivo `.env`.
+* **Beneficio:** Permite que el entorno esté operativo inmediatamente después del despliegue (`Plug & Play`), sin necesidad de ejecutar scripts SQL manuales para insertar el primer usuario.
+
 ## 🛡️ Arquitectura de Seguridad
 La seguridad es el núcleo de este proyecto. Se implementó una estrategia **Stateless** basada en **JWT (JSON Web Tokens)**, eliminando el uso de sesiones de servidor para garantizar escalabilidad.
 
@@ -35,7 +66,7 @@ La seguridad es el núcleo de este proyecto. Se implementó una estrategia **Sta
 3. **Contexto de Seguridad:** Si el token es válido, se inyecta la autenticación en el `SecurityContextHolder` de Spring.
 4. **Protección Híbrida:**
    - **Nivel Gateway (`SecurityConfig`):** Protege rutas globales y expone endpoints públicos (Swagger, Auth) usando `AuthorizeHttpRequests`.
-   - **Nivel Método (`@PreAuthorize`):** Control granular de roles (`ROLE_ADMINISTRADOR`, `ROLE_TEACHER`) y permisos directamente en los controladores.
+   - **Nivel Método (`@PreAuthorize`):** Control granular de roles (`ROLE_ADMINISTRADOR`, `ROLE_TEACHER`, `ROLE_STUDENT`) y permisos directamente en los controladores.
 
 ### Diagrama de Flujo de Petición
 ```mermaid
@@ -54,7 +85,7 @@ graph TD
 ```
 
 ### Decisiones de Diseño en Seguridad:
-* **Deny All por defecto:** Usé una estrategia de "lista blanca". Si se me olvida configurar un endpoint, el sistema lo bloquea por defecto (`denyAll()`).
+* **Deny All por defecto:** Usé una estrategia, si se me olvida configurar un endpoint, el sistema lo bloquea por defecto (`denyAll()`).
 * **Manejo de Errores:** Implementación de `AuthenticationEntryPoint` para devolver respuestas JSON claras y estructuradas en lugar de errores HTML genéricos cuando falla la autenticación.
 
 ---
