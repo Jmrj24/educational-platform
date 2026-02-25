@@ -27,20 +27,19 @@ public class AdminBootstrap implements CommandLineRunner {
     private final RoleService roleService;
     private final PermissionService permissionService;
     private final PasswordEncoder passwordEncoder;
+    private final String adminUsername;
+    private final String adminPassword;
 
     public AdminBootstrap(UserSecRepository userSecRepository, RoleService roleService,
-                          PermissionService permissionService, PasswordEncoder passwordEncoder) {
+                          PermissionService permissionService, PasswordEncoder passwordEncoder,
+                          @Value("${app.admin.username}") String adminUsername, @Value("${app.admin.password}") String adminPassword) {
         this.userSecRepository = userSecRepository;
         this.roleService = roleService;
         this.permissionService = permissionService;
         this.passwordEncoder = passwordEncoder;
+        this.adminUsername = adminUsername;
+        this.adminPassword = adminPassword;
     }
-
-    @Value("${app.admin.username}")
-    private String adminUsername;
-
-    @Value("${app.admin.password}")
-    private String adminPassword;
 
     private static final Logger log = LoggerFactory.getLogger(AdminBootstrap.class);
 

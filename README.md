@@ -169,7 +169,26 @@ Asegúrate de tener MySQL corriendo y que las credenciales en el `.env` coincida
 mvn clean install
 java -jar target/*.jar
 ```
+---
+## 🧪 Testing y Calidad de Código (En Desarrollo 🚧)
 
+Este proyecto incluye una base sólida de pruebas automatizadas enfocadas en los flujos críticos del negocio.
+
+* **Stack de Pruebas:** Implementadas con **JUnit 5** y **Mockito** para aislar correctamente las capas de servicios y controladores.
+* **Cobertura:** Uso de **JaCoCo** para el análisis, medición y reporte del *Code Coverage*.
+* **Manejo Global de Excepciones:** Uso de `@ControllerAdvice` para atrapar errores internos de Spring y devolver respuestas HTTP limpias y estructuradas.
+
+### 🗺️ Roadmap de Pruebas Unitarias
+
+**Completado:**
+- [x] Flujos de creación y eliminación (Estudiantes/Profesores + Cuentas).
+- [x] Lógica de transacciones para inscripciones a cursos y asignaciones de profesores.
+- [x] Bootstrap inicial (Verificación y creación automática del perfil Administrador).
+
+**En progreso / Próximos pasos:**
+- [ ] Completar Controladores y Servicios de Estudiantes y Profesores.
+- [ ] Dominios de Catálogo (Cursos).
+- [ ] Dominios de Seguridad y Acceso (Usuarios, Roles, Permisos).
 ---
 **Autor:** Jeferson Rosales
 *Proyecto realizado con fines de práctica profesional y profundización en arquitectura de software.*
