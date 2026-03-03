@@ -3,6 +3,7 @@ package com.example.demo.application.student;
 import com.example.demo.exception.ConflictException;
 import com.example.demo.student.IStudentService;
 import com.example.demo.student.Student;
+import com.example.demo.student.StudentTestDataFactory;
 import com.example.demo.student.dto.StudentRequestDTO;
 import com.example.demo.student.dto.StudentResponseDTO;
 import com.example.demo.student.mapper.StudentMapper;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -33,10 +34,11 @@ public class CreateStudentAccountTest {
     @Test
     @DisplayName("Registrar un nuevo estudiante junto con su cuenta de acceso de seguridad")
     void createStudentAndAccount_validStudentRequest_returnSuccessfulResponse() {
-        StudentRequestDTO request = this.createValidRequest();
-        Student student = this.createStudent(request);
-        StudentResponseDTO studentResponseExpected = this.createStudentResponse(request);
-        UserSecResponseDTO userSecResponseDTO = this.createUserSecResponse(request);
+        Long idStudent = 87L, idUserSec = 52L;
+        StudentRequestDTO request = StudentTestDataFactory.createValidRequest();
+        Student student = StudentTestDataFactory.createStudentFromRequest(request, idStudent);
+        StudentResponseDTO studentResponseExpected = StudentTestDataFactory.createStudentResponseDTO(student, Collections.emptyList());
+        UserSecResponseDTO userSecResponseDTO = this.createUserSecResponse(request, idStudent, idUserSec);
         UserSecRequestDTO userSecRequestDTO = this.createUserSecRequest(request);
 
         when(studentService.saveStudent(request.name(), request.mail())).thenReturn(student);
@@ -53,7 +55,7 @@ public class CreateStudentAccountTest {
     @Test
     @DisplayName("Debe fallar al no crear un estudiante valido")
     void createStudentAndAccount_failNewStudent_returnSuccessfulResponse() {
-        StudentRequestDTO request = this.createValidRequest();
+        StudentRequestDTO request = StudentTestDataFactory.createValidRequest();
 
         doThrow(new ConflictException("El email ya esta registrado")).when(studentService).saveStudent(any(), any());
 
@@ -68,8 +70,9 @@ public class CreateStudentAccountTest {
     @Test
     @DisplayName("Debe fallar al no crear una cuenta estudiante valida")
     void createStudentAndAccount_failNewAccountStudent_returnSuccessfulResponse() {
-        StudentRequestDTO request = this.createValidRequest();
-        Student student = this.createStudent(request);
+        Long idStudent = 87L;
+        StudentRequestDTO request = StudentTestDataFactory.createValidRequest();
+        Student student = StudentTestDataFactory.createStudentFromRequest(request, idStudent);
 
         when(studentService.saveStudent(any(), any())).thenReturn(student);
         doThrow(new ConflictException("El Username ya esta registrado")).when(userSecService).saveUserSec(any(), any(), any());
@@ -81,25 +84,27 @@ public class CreateStudentAccountTest {
         verify(studentMapper,  never()).toStudentResponse(any());
     }
 
-    private StudentRequestDTO createValidRequest() {
-        return new StudentRequestDTO("Maria85", "1234", true, true, true, true, new HashSet<>(), "Maria", "maria@mail.com");
-    }
-
     private UserSecRequestDTO createUserSecRequest(StudentRequestDTO request) {
-        return new UserSecRequestDTO(request.username(), request.password(), request.enabled(),
-                request.accountNotExpired(), request.accountNotLocked(),request.credentialNotExpired(), new HashSet<>());
+        return new UserSecRequestDTO(
+                request.username(),
+                request.password(),
+                request.enabled(),
+                request.accountNotExpired(),
+                request.accountNotLocked(),
+                request.credentialNotExpired(),
+                new HashSet<>());
     }
 
-    private UserSecResponseDTO createUserSecResponse(StudentRequestDTO request) {
-        return new UserSecResponseDTO(52L, request.username(), request.password(), request.enabled(), request.accountNotExpired(),
-                request.accountNotLocked(),request.credentialNotExpired(), new HashSet<>(), SubjectType.ESTUDIANTE, 87L);
-    }
-
-    private Student createStudent(StudentRequestDTO request) {
-        return new Student(87L, request.name(), request.mail(), new ArrayList<>());
-    }
-
-    private StudentResponseDTO createStudentResponse(StudentRequestDTO request) {
-        return new StudentResponseDTO(87L, request.name(), request.mail(), new ArrayList<>());
+    private UserSecResponseDTO createUserSecResponse(StudentRequestDTO request, Long idStudent, Long idUserSec) {
+        return new UserSecResponseDTO(
+                idUserSec, request.username(),
+                request.password(),
+                request.enabled(),
+                request.accountNotExpired(),
+                request.accountNotLocked(),
+                request.credentialNotExpired(),
+                new HashSet<>(),
+                SubjectType.ESTUDIANTE,
+                idStudent);
     }
 }

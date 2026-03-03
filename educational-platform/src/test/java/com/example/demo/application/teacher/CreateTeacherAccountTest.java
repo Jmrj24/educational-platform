@@ -3,6 +3,7 @@ package com.example.demo.application.teacher;
 import com.example.demo.exception.ConflictException;
 import com.example.demo.teacher.ITeacherService;
 import com.example.demo.teacher.Teacher;
+import com.example.demo.teacher.TeacherTestDataFactory;
 import com.example.demo.teacher.dto.TeacherRequestDTO;
 import com.example.demo.teacher.dto.TeacherResponseDTO;
 import com.example.demo.teacher.mapper.TeacherMapper;
@@ -33,11 +34,12 @@ public class CreateTeacherAccountTest {
     @Test
     @DisplayName("Registrar un nuevo profesor junto con su cuenta de acceso de seguridad")
     void createTeacherAndAccount_validTeacherRequest_returnSuccessfulResponse() {
-        TeacherRequestDTO request = this.createValidRequest();
+        Long idTeacher = 78L, idUserSec = 25L;
+        TeacherRequestDTO request = TeacherTestDataFactory.createValidRequest();
         UserSecRequestDTO userSecRequestDTO = this.createUserRequest(request);
-        UserSecResponseDTO userSecResponseDTO = this.createUserResponse(request);
-        Teacher teacher = this.createTeacher(request);
-        TeacherResponseDTO teacherResponseExpected = this.createTeacherResponse(request);
+        UserSecResponseDTO userSecResponseDTO = this.createUserResponse(request, idTeacher, idUserSec);
+        Teacher teacher = TeacherTestDataFactory.createTeacherFromRequest(request, idTeacher);
+        TeacherResponseDTO teacherResponseExpected = this.createTeacherResponse(request, idTeacher);
 
         when(teacherService.saveTeacher(request.name(), request.mail(), request.specialty())).thenReturn(teacher);
         when(userSecService.saveUserSec(userSecRequestDTO, SubjectType.PROFESOR, Optional.of(teacher.getId()))).thenReturn(userSecResponseDTO);
@@ -53,7 +55,7 @@ public class CreateTeacherAccountTest {
     @Test
     @DisplayName("Debe fallar al no crear un profesor valido")
     void createTeacherAndAccount_failNewTeacher_returnSuccessfulResponse() {
-        TeacherRequestDTO request = this.createValidRequest();
+        TeacherRequestDTO request = TeacherTestDataFactory.createValidRequest();
 
         doThrow(new ConflictException("El email ya esta registrado")).when(teacherService).saveTeacher(any(), any(), any());
 
@@ -67,8 +69,9 @@ public class CreateTeacherAccountTest {
     @Test
     @DisplayName("Debe fallar al no crear una cuenta profesor valida")
     void createTeacherAndAccount_failNewAccountTeacher_returnSuccessfulResponse() {
-        TeacherRequestDTO request = this.createValidRequest();
-        Teacher teacher = this.createTeacher(request);
+        Long idTeacher = 78L;
+        TeacherRequestDTO request = TeacherTestDataFactory.createValidRequest();
+        Teacher teacher = TeacherTestDataFactory.createTeacherFromRequest(request, idTeacher);
 
         when(teacherService.saveTeacher(any(), any(), any())).thenReturn(teacher);
         doThrow(new ConflictException("El Username ya esta registrado")).when(userSecService).saveUserSec(any(), any(), any());
@@ -80,25 +83,35 @@ public class CreateTeacherAccountTest {
         verify(teacherMapper,  never()).toTeacherResponse(any());
     }
 
-    private TeacherRequestDTO createValidRequest() {
-        return new TeacherRequestDTO("Mateo28", "1234", true, true, true, true, new HashSet<>(), "Mateo", "mateo@mail.com", "Matematicas");
-    }
-
     private UserSecRequestDTO createUserRequest(TeacherRequestDTO request) {
-        return new UserSecRequestDTO(request.username(), request.password(), request.enabled(),
-                request.accountNotExpired(), request.accountNotLocked(),request.credentialNotExpired(), new HashSet<>());
+        return new UserSecRequestDTO(
+                request.username(),
+                request.password(),
+                request.enabled(),
+                request.accountNotExpired(),
+                request.accountNotLocked(),
+                request.credentialNotExpired(),
+                new HashSet<>());
     }
 
-    private UserSecResponseDTO createUserResponse(TeacherRequestDTO request) {
-        return new UserSecResponseDTO(25L, request.username(), request.password(), request.enabled(),
-                request.accountNotExpired(), request.accountNotLocked(),request.credentialNotExpired(), new HashSet<>(), SubjectType.PROFESOR, 78L);
+    private UserSecResponseDTO createUserResponse(TeacherRequestDTO request, Long idTeacher, Long idUserSec) {
+        return new UserSecResponseDTO(
+                idUserSec, request.username(),
+                request.password(),
+                request.enabled(),
+                request.accountNotExpired(),
+                request.accountNotLocked(),
+                request.credentialNotExpired(),
+                new HashSet<>(),
+                SubjectType.PROFESOR,
+                idTeacher);
     }
 
-    private Teacher createTeacher(TeacherRequestDTO request) {
-        return new Teacher(78L, request.name(), request.mail(), request.specialty(), new ArrayList<>());
-    }
-
-    private TeacherResponseDTO createTeacherResponse(TeacherRequestDTO request) {
-        return new TeacherResponseDTO(78L, request.name(), request.mail(), request.specialty(), new ArrayList<>());
+    private TeacherResponseDTO createTeacherResponse(TeacherRequestDTO request, Long idTeacher) {
+        return new TeacherResponseDTO(
+                idTeacher, request.name(),
+                request.mail(),
+                request.specialty(),
+                new ArrayList<>());
     }
 }

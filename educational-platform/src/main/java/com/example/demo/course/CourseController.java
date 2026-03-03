@@ -1,5 +1,6 @@
 package com.example.demo.course;
 
+import com.example.demo.course.authorization.CourseAuthorizationChecker;
 import com.example.demo.course.dto.CourseRequestDTO;
 import com.example.demo.course.dto.CourseResponseDTO;
 import com.example.demo.course.dto.CourseUpdateDTO;
@@ -16,9 +17,11 @@ import java.util.List;
 @PreAuthorize("denyAll()")
 public class CourseController {
     private final ICourseService courseService;
+    private final CourseAuthorizationChecker courseAuthorizationChecker;
 
-    public CourseController(ICourseService courseService) {
+    public CourseController(ICourseService courseService, CourseAuthorizationChecker courseAuthorizationChecker) {
         this.courseService = courseService;
+        this.courseAuthorizationChecker = courseAuthorizationChecker;
     }
 
     @PostMapping
@@ -42,6 +45,7 @@ public class CourseController {
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR','ROLE_PROFESOR')")
     public ResponseEntity<CourseResponseDTO> updateCourse(@PathVariable Long id, @RequestBody CourseUpdateDTO courseUpdateDTO) {
+        this.courseAuthorizationChecker.authorizationUpdate(id);
         return ResponseEntity.ok(this.courseService.updateCourse(id, courseUpdateDTO));
     }
 

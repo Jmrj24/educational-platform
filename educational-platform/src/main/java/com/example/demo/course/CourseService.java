@@ -20,12 +20,10 @@ import java.util.List;
 public class CourseService implements ICourseService{
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
-    private final UserSecRepository userSecRepository;
 
-    public CourseService(CourseRepository courseRepository, CourseMapper courseMapper, UserSecRepository userSecRepository) {
+    public CourseService(CourseRepository courseRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
         this.courseMapper = courseMapper;
-        this.userSecRepository = userSecRepository;
     }
 
     @Override
@@ -56,22 +54,8 @@ public class CourseService implements ICourseService{
 
     @Override
     public CourseResponseDTO updateCourse(Long id, CourseUpdateDTO courseUpdateDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication==null) {
-            throw new InvalidTokenException("No estas correctamente Autenticado");
-        }
-
-        String username = authentication.getName();
-        UserSec userSec = userSecRepository.findUserEntityByUsername(username).orElseThrow(() ->
-                new NotFoundException("Username no se ha encontrado"));
-
         Course updateCourse = this.findByIdCourseEntity(id);
 
-        if(userSec.getSubjectType().equals(SubjectType.PROFESOR)) {
-            if(!userSec.getIdSubject().equals(updateCourse.getTeacherCourse().getId())) {
-                throw new ForbiddenException("No tienes permisos para modificar este recurso");
-            }
-        }
         if(courseUpdateDTO.getName()!=null&&!courseUpdateDTO.getName().isBlank()) {
             updateCourse.setName(courseUpdateDTO.getName());
         }

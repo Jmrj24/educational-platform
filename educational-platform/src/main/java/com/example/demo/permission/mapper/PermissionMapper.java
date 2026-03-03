@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class PermissionMapper {
     public PermissionResponseDTO toPermissionResponse (Permission permission) {
+        if(permission==null) {
+            return null;
+        }
         return new PermissionResponseDTO(permission.getId(), permission.getPermissionName());
     }
 }

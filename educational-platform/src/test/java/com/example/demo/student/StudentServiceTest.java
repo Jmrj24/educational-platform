@@ -3,14 +3,14 @@ package com.example.demo.student;
 import com.example.demo.exception.ConflictException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.student.dto.StudentResponseDTO;
+import com.example.demo.student.dto.StudentUpdateDTO;
 import com.example.demo.student.mapper.StudentMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -45,7 +45,7 @@ public class StudentServiceTest {
         String name = "Jose";
         String mail = "prueba@mail.com";
 
-        when(this.studentRepository.findStudentEntityByMail(mail)).thenReturn(Optional.empty());
+        when(studentRepository.findStudentEntityByMail(mail)).thenReturn(Optional.empty());
 
         studentService.saveStudent(name, mail);
 
@@ -58,11 +58,38 @@ public class StudentServiceTest {
     }
 
     @Test
+    @DisplayName("Debe devolver un lista de estudiantes DTO si existen")
+    void findAllStudents_studentsExist_returnStudents() {
+        Student student = StudentTestDataFactory.createStudent();
+        List<Student> listStudents = new ArrayList<>(List.of(student));
+        StudentResponseDTO studentResponseDTO = StudentTestDataFactory.createStudentResponseDTO(student, Collections.emptyList());
+        List<StudentResponseDTO> listStudentsResponseExpect = new ArrayList<>(List.of(studentResponseDTO));
+
+        when(studentRepository.findAll()).thenReturn(listStudents);
+        when(studentMapper.toStudentResponse(student)).thenReturn(studentResponseDTO);
+
+        List<StudentResponseDTO> listStudentsResponseResult = studentService.findAllStudents();
+
+        assertEquals(listStudentsResponseExpect, listStudentsResponseResult);
+    }
+
+    @Test
+    @DisplayName("Debe devolver un lista vacia si no hay registro de estudiantes")
+    void findAllStudents_StudentsNoExist_returnListEmpty() {
+        when(studentRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<StudentResponseDTO> listStudentsResponseResult = studentService.findAllStudents();
+
+        assertNotNull(listStudentsResponseResult);
+        assertTrue(listStudentsResponseResult.isEmpty());
+    }
+
+    @Test
     @DisplayName("Debe devolver un estudiante si el Id existe")
     void findByIdStudent_studentExist_returnStudentDTO() {
-        Long id = 1L;
-        Student student = new Student(1L, "Jose", "jose@mail.com", new ArrayList<>());
-        StudentResponseDTO studentExpected = new StudentResponseDTO(1L, "Jose", "jose@mail.com", new ArrayList<>());
+        Long id = 89L;
+        Student student = StudentTestDataFactory.createStudent();
+        StudentResponseDTO studentExpected = StudentTestDataFactory.createStudentResponseDTO(student, Collections.emptyList());
 
         when(this.studentRepository.findById(id)).thenReturn(Optional.of(student));
         when(this.studentMapper.toStudentResponse(student)).thenReturn(studentExpected);
@@ -83,5 +110,59 @@ public class StudentServiceTest {
         assertThrows(NotFoundException.class, () -> {
             studentService.findByIdStudent(id);
         });
+    }
+
+    @Test
+    @DisplayName("Debe actualizar el estudiante si todo sale bien")
+    void updateStudent_studentExistAndMailValid_studentSuccessful() {
+        Long idStudent = 89L;
+        Student student = StudentTestDataFactory.createStudent();
+        StudentUpdateDTO studentUpdate = new StudentUpdateDTO("Nombre nuevo", "Nuevo mail");
+
+        when(studentRepository.findById(idStudent)).thenReturn(Optional.of(student));
+        when(studentRepository.findStudentEntityByMail(studentUpdate.getMail())).thenReturn(Optional.empty());
+        when(studentRepository.save(student)).thenReturn(student);
+        StudentResponseDTO studentResponseExpected = StudentTestDataFactory.createStudentResponseDTO(student, Collections.emptyList());
+        when(studentMapper.toStudentResponse(student)).thenReturn(studentResponseExpected);
+
+        StudentResponseDTO studentResponseResult = studentService.updateStudent(idStudent, studentUpdate);
+
+        assertEquals(student.getName(), studentUpdate.getName());
+        assertEquals(student.getMail(), studentUpdate.getMail());
+        verify(studentRepository).save(student);
+        verify(studentMapper).toStudentResponse(student);
+        assertEquals(studentResponseExpected, studentResponseResult);
+    }
+
+    @Test
+    @DisplayName("Debe lanzar una exception si el mail nuevo, ya existe")
+    void updateStudent_studentExistAndMailNoValid_runException() {
+        Long idStudent = 89L;
+        Student student = new Student();
+        StudentUpdateDTO studentUpdate = new StudentUpdateDTO("Nombre nuevo", "Nuevo mail");
+
+        when(studentRepository.findById(idStudent)).thenReturn(Optional.of(student));
+        when(studentRepository.findStudentEntityByMail(studentUpdate.getMail())).thenReturn(Optional.of(new Student()));
+
+        assertThrows(ConflictException.class, () -> {
+            studentService.updateStudent(idStudent, studentUpdate);
+        });
+
+        verify(studentRepository, never()).save(any());
+    }
+
+    @Test
+    @DisplayName("Debe lanzar una exception si no existe el ID")
+    void updateStudent_studentNoExist_runException() {
+        Long idStudent = 89L;
+        StudentUpdateDTO studentUpdate = new StudentUpdateDTO("Nombre nuevo", "Nuevo mail");
+
+        when(studentRepository.findById(idStudent)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> {
+            studentService.updateStudent(idStudent, studentUpdate);
+        });
+
+        verify(studentRepository, never()).save(any());
     }
 }

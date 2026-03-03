@@ -14,6 +14,9 @@ import java.util.List;
 @Component
 public class CourseMapper {
     public CourseResponseDTO toCourseResponse(Course course) {
+        if(course==null) {
+            return null;
+        }
         TeacherSummaryResponse teacherResponse = course.getTeacherCourse() != null
                 ? this.toTeacherSummaryResponse(course.getTeacherCourse())
                 : null;

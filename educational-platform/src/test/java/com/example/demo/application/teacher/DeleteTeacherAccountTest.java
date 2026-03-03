@@ -46,7 +46,7 @@ public class DeleteTeacherAccountTest {
             deleteTeacherAccount.deleteTeacherAndAccount(idTeacher);
         });
 
-        verify(teacherService, never()).deleteByIdTeacher(idTeacher);
+        verify(teacherService, never()).deleteByIdTeacher(any());
         verify(userSecRepository, never()).delete(any());
     }
 }

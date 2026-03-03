@@ -20,6 +20,9 @@ public class UserSecMapper {
     }
 
     public UserSecResponseDTO toUserSecResponse(UserSec userSec) {
+        if(userSec==null) {
+            return null;
+        }
         Set<RoleResponseDTO> roleResponseDTO = new HashSet<>();
         for(Role r: userSec.getRolesList()) {
             roleResponseDTO.add(this.roleMapper.toRoleResponse(r));

@@ -12,6 +12,9 @@ import java.util.List;
 @Component
 public class StudentMapper {
     public StudentResponseDTO toStudentResponse(Student student) {
+        if(student==null) {
+            return null;
+        }
         List<CourseSummaryResponse> listCourses = new ArrayList<>();
         if(!student.getListCourses().isEmpty()) {
             for(Course c: student.getListCourses()) {

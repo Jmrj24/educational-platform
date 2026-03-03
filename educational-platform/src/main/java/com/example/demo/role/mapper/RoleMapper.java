@@ -20,6 +20,9 @@ public class RoleMapper {
     }
 
     public RoleResponseDTO toRoleResponse(Role role) {
+        if(role==null) {
+            return null;
+        }
         Set<PermissionResponseDTO> permissionListDto = new HashSet<>();
         for(Permission p:role.getPermissionsList()) {
             permissionListDto.add(this.permissionMapper.toPermissionResponse(p));

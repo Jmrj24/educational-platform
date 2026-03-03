@@ -12,6 +12,9 @@ import java.util.List;
 @Component
 public class TeacherMapper {
     public TeacherResponseDTO toTeacherResponse(Teacher teacher) {
+        if(teacher==null) {
+            return null;
+        }
         List<CourseSummaryResponse> listCourses = new ArrayList<>();
         if(!teacher.getListCourses().isEmpty()) {
             for(Course c: teacher.getListCourses()) {

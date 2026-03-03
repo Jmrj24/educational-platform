@@ -46,7 +46,7 @@ public class DeleteStudentAccountTest {
             deleteStudentAccount.deleteStudentAndAccount(idStudent);
         });
 
-        verify(studentService, never()).deleteByIdStudent(idStudent);
+        verify(studentService, never()).deleteByIdStudent(any());
         verify(userSecRepository, never()).delete(any());
     }
 }
