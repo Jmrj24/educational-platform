@@ -46,4 +46,13 @@ public class StudentTestDataFactory {
                 listCourses
         );
     }
+
+    public static StudentResponseDTO createStudentResponseDefault() {
+        return new StudentResponseDTO(
+                12L,
+                "Maria",
+                "maria@mail.com",
+                new ArrayList<>()
+        );
+    }
 }

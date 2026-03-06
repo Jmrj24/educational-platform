@@ -172,23 +172,21 @@ java -jar target/*.jar
 ---
 ## 🧪 Testing y Calidad de Código (En Desarrollo 🚧)
 
-Este proyecto incluye una base sólida de pruebas automatizadas enfocadas en los flujos críticos del negocio.
-
-* **Stack de Pruebas:** Implementadas con **JUnit 5** y **Mockito** para aislar correctamente las capas de servicios y controladores.
-* **Cobertura:** Uso de **JaCoCo** para el análisis, medición y reporte del *Code Coverage*.
-* **Manejo Global de Excepciones:** Uso de `@ControllerAdvice` para atrapar errores internos de Spring y devolver respuestas HTTP limpias y estructuradas.
+Este proyecto cuenta con una suite de pruebas automatizadas que garantizan la integridad de los flujos críticos.
+* **Stack de Pruebas:** Implementadas con **JUnit 5** y **Mockito**, asegurando el aislamiento total mediante mocks en capas de servicios y controladores.
+* **Cobertura:** Integración con **JaCoCo** para el análisis de cobertura, asegurando que cada regla de negocio sea validada.
+* **Robustez:** Validación de contratos HTTP y manejo global de excepciones mediante `@ControllerAdvice`.
 
 ### 🗺️ Roadmap de Pruebas Unitarias
 
-**Completado:**
-- [x] Flujos de creación y eliminación (Estudiantes/Profesores + Cuentas).
-- [x] Lógica de transacciones para inscripciones a cursos y asignaciones de profesores.
-- [x] Bootstrap inicial (Verificación y creación automática del perfil Administrador).
+✅ **Completado (Lógica de Negocio):**
+* **Gestión de Usuarios:** Flujos completos de creación, actualización y eliminación (Estudiantes/Profesores + Sincronización de Cuentas).
+* **Inscripciones y Asignaciones:** Lógica transaccional para matriculación de estudiantes y asignación de docentes a cursos.
+* **Controladores:** Validación de contratos de API, códigos de estado HTTP y respuestas JSON.
+* **Bootstrap Inicial:** Verificación y creación automática del perfil Administrador.
 
-**En progreso / Próximos pasos:**
-- [ ] Completar Controladores y Servicios de Estudiantes y Profesores.
-- [ ] Dominios de Catálogo (Cursos).
-- [ ] Dominios de Seguridad y Acceso (Usuarios, Roles, Permisos).
+⏳ **En Progreso / Próximos pasos:**
+* **Seguridad:** Implementación de tests para Dominios de Acceso (Usuarios, Roles y Permisos).
 ---
 **Autor:** Jeferson Rosales
 *Proyecto realizado con fines de práctica profesional y profundización en arquitectura de software.*

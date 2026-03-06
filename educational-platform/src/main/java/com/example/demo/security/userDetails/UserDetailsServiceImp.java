@@ -28,7 +28,6 @@ public class UserDetailsServiceImp implements UserDetailsService {
                 .orElseThrow(() -> new InvalidCredentialsException("Usuario o Password invalidos"));
 
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        
 
         userSec.getRolesList()
                 .forEach(role -> authorityList.add(new SimpleGrantedAuthority("ROLE_".concat(role.getRole().name()))));

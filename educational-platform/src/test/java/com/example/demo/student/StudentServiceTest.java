@@ -30,7 +30,7 @@ public class StudentServiceTest {
         String mail = "prueba@mail.com";
         Student student = new Student();
 
-        when(this.studentRepository.findStudentEntityByMail(mail)).thenReturn(Optional.of(student));
+        when(studentRepository.findStudentEntityByMail(mail)).thenReturn(Optional.of(student));
 
         assertThrows(ConflictException.class, () -> {
             studentService.saveStudent(name, mail);
@@ -75,7 +75,7 @@ public class StudentServiceTest {
 
     @Test
     @DisplayName("Debe devolver un lista vacia si no hay registro de estudiantes")
-    void findAllStudents_StudentsNoExist_returnListEmpty() {
+    void findAllStudents_studentsNoExist_returnListEmpty() {
         when(studentRepository.findAll()).thenReturn(Collections.emptyList());
 
         List<StudentResponseDTO> listStudentsResponseResult = studentService.findAllStudents();
@@ -91,8 +91,8 @@ public class StudentServiceTest {
         Student student = StudentTestDataFactory.createStudent();
         StudentResponseDTO studentExpected = StudentTestDataFactory.createStudentResponseDTO(student, Collections.emptyList());
 
-        when(this.studentRepository.findById(id)).thenReturn(Optional.of(student));
-        when(this.studentMapper.toStudentResponse(student)).thenReturn(studentExpected);
+        when(studentRepository.findById(id)).thenReturn(Optional.of(student));
+        when(studentMapper.toStudentResponse(student)).thenReturn(studentExpected);
 
         StudentResponseDTO studentResult = studentService.findByIdStudent(id);
 
@@ -105,7 +105,7 @@ public class StudentServiceTest {
     void findByIdStudent_studentNoExist_runException() {
         Long id = 1L;
 
-        when(this.studentRepository.findById(id)).thenReturn(Optional.empty());
+        when(studentRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> {
             studentService.findByIdStudent(id);
@@ -114,7 +114,7 @@ public class StudentServiceTest {
 
     @Test
     @DisplayName("Debe actualizar el estudiante si todo sale bien")
-    void updateStudent_studentExistAndMailValid_studentSuccessful() {
+    void updateStudent_studentExistAndMailValid_studentUpdateSuccessful() {
         Long idStudent = 89L;
         Student student = StudentTestDataFactory.createStudent();
         StudentUpdateDTO studentUpdate = new StudentUpdateDTO("Nombre nuevo", "Nuevo mail");

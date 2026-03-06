@@ -46,8 +46,8 @@ public class CourseMapperTest {
     }
 
     @Test
-    @DisplayName("Debe devolver un CourseResponse con el profesor null si el profesor de entrada es null")
-    void toCourseResponse_teacherNull_returnCourseResponse() {
+    @DisplayName("Debe devolver un CourseResponse con el profesor null y lista vacia, si el profesor de entrada es null y la lista esta vacia")
+    void toCourseResponse_teacherNullAndListStudentsEmpty_returnCourseResponse() {
         Course course = CourseTestDataFactory.createCourse();
         CourseResponseDTO courseResponseExpect = CourseTestDataFactory.createCourseResponse(course, null, Collections.emptyList());
 

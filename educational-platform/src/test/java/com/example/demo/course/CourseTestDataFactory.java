@@ -27,4 +27,14 @@ public class CourseTestDataFactory {
                 teacher,
                 listStudents);
     }
+
+    public static CourseResponseDTO createCourseResponseDefault() {
+        return new CourseResponseDTO(
+                8L,
+                "Logica de programacion",
+                "aspectos basicos",
+                false,
+                null,
+                new ArrayList<>());
+    }
 }

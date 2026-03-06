@@ -1,9 +1,12 @@
 package com.example.demo.teacher;
 
+import com.example.demo.course.dto.CourseSummaryResponse;
 import com.example.demo.teacher.dto.TeacherRequestDTO;
+import com.example.demo.teacher.dto.TeacherResponseDTO;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class TeacherTestDataFactory {
     public static TeacherRequestDTO createValidRequest() {
@@ -36,5 +39,25 @@ public class TeacherTestDataFactory {
                 request.mail(),
                 request.specialty(),
                 new ArrayList<>());
+    }
+
+    public static TeacherResponseDTO createTeacherResponseDTO(Teacher teacher, List<CourseSummaryResponse> listCourses) {
+        return new TeacherResponseDTO(
+                teacher.getId(),
+                teacher.getName(),
+                teacher.getMail(),
+                teacher.getSpecialty(),
+                listCourses
+        );
+    }
+
+    public static TeacherResponseDTO createTeacherResponseDefault() {
+        return new TeacherResponseDTO(
+                37L,
+                "Mateo",
+                "mateo@mail.com",
+                "Ciencias",
+                new ArrayList<>()
+        );
     }
 }

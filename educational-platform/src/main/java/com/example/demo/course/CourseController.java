@@ -4,6 +4,7 @@ import com.example.demo.course.authorization.CourseAuthorizationChecker;
 import com.example.demo.course.dto.CourseRequestDTO;
 import com.example.demo.course.dto.CourseResponseDTO;
 import com.example.demo.course.dto.CourseUpdateDTO;
+import com.example.demo.security.SecurityService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,12 @@ import java.util.List;
 public class CourseController {
     private final ICourseService courseService;
     private final CourseAuthorizationChecker courseAuthorizationChecker;
+    private final SecurityService securityService;
 
-    public CourseController(ICourseService courseService, CourseAuthorizationChecker courseAuthorizationChecker) {
+    public CourseController(ICourseService courseService, CourseAuthorizationChecker courseAuthorizationChecker, SecurityService securityService) {
         this.courseService = courseService;
         this.courseAuthorizationChecker = courseAuthorizationChecker;
+        this.securityService = securityService;
     }
 
     @PostMapping
@@ -45,7 +48,8 @@ public class CourseController {
     @PatchMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR','ROLE_PROFESOR')")
     public ResponseEntity<CourseResponseDTO> updateCourse(@PathVariable Long id, @RequestBody CourseUpdateDTO courseUpdateDTO) {
-        this.courseAuthorizationChecker.authorizationUpdate(id);
+        String username = securityService.getCurrentUsername();
+        this.courseAuthorizationChecker.authorizationUpdate(id, username);
         return ResponseEntity.ok(this.courseService.updateCourse(id, courseUpdateDTO));
     }
 

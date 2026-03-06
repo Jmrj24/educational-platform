@@ -61,4 +61,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse(ex.getMessage(),  String.valueOf(HttpStatus.FORBIDDEN)));
     }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<ErrorResponse> AuthenticationInvalid(AuthenticationCredentialsNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ErrorResponse(ex.getMessage(),  String.valueOf(HttpStatus.UNAUTHORIZED)));
+    }
 }
