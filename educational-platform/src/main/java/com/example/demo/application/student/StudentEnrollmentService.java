@@ -2,6 +2,7 @@ package com.example.demo.application.student;
 
 import com.example.demo.course.Course;
 import com.example.demo.course.CourseRepository;
+import com.example.demo.exception.ConflictException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.student.Student;
 import com.example.demo.student.StudentRepository;
@@ -22,6 +23,10 @@ public class StudentEnrollmentService {
     public void studentInscription(Long idCourse, Long idStudent) {
         Course course = this.courseRepository.findById(idCourse).orElseThrow(() -> new NotFoundException("El id del Curso no existe"));
         Student student = this.studentRepository.findById(idStudent).orElseThrow(() -> new NotFoundException("El id del Estudiante no existe"));
+
+        if(course.getListStudents().stream().anyMatch(c -> c.getId().equals(idStudent))) {
+            throw new ConflictException("El estudiante ya esta inscrito en el curso!");
+        }
 
         student.getListCourses().add(course);
         course.getListStudents().add(student);

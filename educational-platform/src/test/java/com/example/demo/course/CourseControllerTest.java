@@ -4,16 +4,16 @@ import com.example.demo.course.authorization.CourseAuthorizationChecker;
 import com.example.demo.course.dto.CourseRequestDTO;
 import com.example.demo.course.dto.CourseResponseDTO;
 import com.example.demo.course.dto.CourseUpdateDTO;
-import com.example.demo.exception.GlobalExceptionHandler;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.security.SecurityService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
@@ -25,22 +25,20 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(CourseController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class CourseControllerTest {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    private final ICourseService courseService = Mockito.mock(ICourseService.class);
-    private final CourseAuthorizationChecker courseAuthorizationChecker = Mockito.mock(CourseAuthorizationChecker.class);
-    private final SecurityService securityService = Mockito.mock(SecurityService.class);
-
-    private final CourseController courseController = new CourseController(courseService, courseAuthorizationChecker, securityService);
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(courseController)
-                .setControllerAdvice(new GlobalExceptionHandler())
-                .build();
-    }
+    @MockitoBean
+    private ICourseService courseService;
+    @MockitoBean
+    private CourseAuthorizationChecker courseAuthorizationChecker;
+    @MockitoBean
+    private SecurityService securityService;
 
     @Test
     @DisplayName("Debe retornar Http 201 y un curso, al crear el mismo")

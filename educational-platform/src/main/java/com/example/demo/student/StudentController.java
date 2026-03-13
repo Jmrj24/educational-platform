@@ -66,16 +66,16 @@ public class StudentController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/inscription/{idCourse}/{idStudent}")
+    @PostMapping("/inscription/student/{idStudent}/course/{idCourse}")
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR')")
-    public ResponseEntity<StudentResponseDTO> studentInscription(@PathVariable Long idCourse, @PathVariable Long idStudent) {
+    public ResponseEntity<StudentResponseDTO> studentInscription(@PathVariable Long idStudent, @PathVariable Long idCourse) {
         this.studentEnrollment.studentInscription(idCourse, idStudent);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/unsubscribe/{idCourse}/{idStudent}")
+    @DeleteMapping("/unsubscribe/student/{idStudent}/course/{idCourse}")
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR')")
-    public ResponseEntity<StudentResponseDTO> studentUnsubscribe(@PathVariable Long idCourse, @PathVariable Long idStudent) {
+    public ResponseEntity<StudentResponseDTO> studentUnsubscribe(@PathVariable Long idStudent, @PathVariable Long idCourse) {
         this.studentDisenrollment.studentUnsubscribe(idCourse, idStudent);
         return ResponseEntity.noContent().build();
     }

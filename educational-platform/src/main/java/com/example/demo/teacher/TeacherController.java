@@ -66,16 +66,16 @@ public class TeacherController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/assign/{idCourse}/{idTeacher}")
+    @PostMapping("/assign/teacher/{idTeacher}/course/{idCourse}")
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR')")
-    public ResponseEntity<TeacherResponseDTO> teacherAssign(@PathVariable Long idCourse, @PathVariable Long idTeacher) {
+    public ResponseEntity<TeacherResponseDTO> teacherAssign(@PathVariable Long idTeacher, @PathVariable Long idCourse) {
         this.assignTeacherToCourse.assign(idCourse, idTeacher);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/unassign/{idCourse}/{idTeacher}")
+    @DeleteMapping("/unassign/teacher/{idTeacher}/course/{idCourse}")
     @PreAuthorize("hasAnyRole('ROLE_ADMINISTRADOR')")
-    public ResponseEntity<TeacherResponseDTO> teacherUnassign(@PathVariable Long idCourse, @PathVariable Long idTeacher) {
+    public ResponseEntity<TeacherResponseDTO> teacherUnassign(@PathVariable Long idTeacher, @PathVariable Long idCourse) {
         this.unassignTeacherToCourse.unassign(idCourse, idTeacher);
         return ResponseEntity.noContent().build();
     }

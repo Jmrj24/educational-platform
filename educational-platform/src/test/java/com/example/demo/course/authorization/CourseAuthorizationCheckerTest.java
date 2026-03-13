@@ -12,7 +12,10 @@ import com.example.demo.userSec.UserSec;
 import com.example.demo.userSec.UserSecRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -21,11 +24,14 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class CourseAuthorizationCheckerTest {
-    private final UserSecRepository userSecRepository = Mockito.mock(UserSecRepository.class);
-    private final CourseRepository courseRepository = Mockito.mock(CourseRepository.class);
-
-    private final CourseAuthorizationChecker courseAuthorizationChecker = new CourseAuthorizationChecker(userSecRepository, courseRepository);
+    @Mock
+    private UserSecRepository userSecRepository;
+    @Mock
+    private CourseRepository courseRepository;
+    @InjectMocks
+    private CourseAuthorizationChecker courseAuthorizationChecker;
 
     @Test
     @DisplayName("Debe lanzar una exception si no existe el usuario")

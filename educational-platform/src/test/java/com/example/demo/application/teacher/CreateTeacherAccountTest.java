@@ -13,9 +13,12 @@ import com.example.demo.userSec.dto.UserSecRequestDTO;
 import com.example.demo.userSec.dto.UserSecResponseDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 
@@ -24,12 +27,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class CreateTeacherAccountTest {
-    private final ITeacherService teacherService = Mockito.mock(ITeacherService.class);
-    private final IUserSecService userSecService = Mockito.mock(IUserSecService.class);
-    private final TeacherMapper teacherMapper = Mockito.mock(TeacherMapper.class);
-
-    private final CreateTeacherAccount createTeacherAccount = new CreateTeacherAccount(teacherService, userSecService, teacherMapper);
+    @Mock
+    private ITeacherService teacherService;
+    @Mock
+    private IUserSecService userSecService;
+    @Mock
+    private TeacherMapper teacherMapper;
+    @InjectMocks
+    private CreateTeacherAccount createTeacherAccount;
 
     @Test
     @DisplayName("Registrar un nuevo profesor junto con su cuenta de acceso de seguridad")
@@ -39,7 +46,7 @@ public class CreateTeacherAccountTest {
         UserSecRequestDTO userSecRequestDTO = this.createUserRequest(request);
         UserSecResponseDTO userSecResponseDTO = this.createUserResponse(request, idTeacher, idUserSec);
         Teacher teacher = TeacherTestDataFactory.createTeacherFromRequest(request, idTeacher);
-        TeacherResponseDTO teacherResponseExpected = this.createTeacherResponse(request, idTeacher);
+        TeacherResponseDTO teacherResponseExpected = TeacherTestDataFactory.createTeacherResponseDTO(teacher, Collections.emptyList());
 
         when(teacherService.saveTeacher(request.name(), request.mail(), request.specialty())).thenReturn(teacher);
         when(userSecService.saveUserSec(userSecRequestDTO, SubjectType.PROFESOR, Optional.of(teacher.getId()))).thenReturn(userSecResponseDTO);
@@ -105,13 +112,5 @@ public class CreateTeacherAccountTest {
                 new HashSet<>(),
                 SubjectType.PROFESOR,
                 idTeacher);
-    }
-
-    private TeacherResponseDTO createTeacherResponse(TeacherRequestDTO request, Long idTeacher) {
-        return new TeacherResponseDTO(
-                idTeacher, request.name(),
-                request.mail(),
-                request.specialty(),
-                new ArrayList<>());
     }
 }

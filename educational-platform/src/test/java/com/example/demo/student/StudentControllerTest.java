@@ -5,18 +5,18 @@ import com.example.demo.application.student.DeleteStudentAccount;
 import com.example.demo.application.student.StudentDisenrollmentService;
 import com.example.demo.application.student.StudentEnrollmentService;
 import com.example.demo.exception.ConflictException;
-import com.example.demo.exception.GlobalExceptionHandler;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.student.dto.StudentRequestDTO;
 import com.example.demo.student.dto.StudentResponseDTO;
 import com.example.demo.student.dto.StudentUpdateDTO;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
@@ -28,25 +28,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(StudentController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class StudentControllerTest {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    private final StudentService studentService = Mockito.mock(StudentService.class);
-    private final StudentEnrollmentService studentEnrollment = Mockito.mock(StudentEnrollmentService.class);
-    private final CreateStudentAccount createStudentAccount = Mockito.mock(CreateStudentAccount.class);
-    private final DeleteStudentAccount deleteStudentAccount = Mockito.mock(DeleteStudentAccount.class);
-    private final StudentDisenrollmentService studentDisenrollment = Mockito.mock(StudentDisenrollmentService.class);
-
-    private final StudentController studentController = new StudentController(studentService, studentEnrollment,
-            createStudentAccount, deleteStudentAccount, studentDisenrollment);
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(studentController)
-                .setControllerAdvice(new GlobalExceptionHandler())
-                .build();
-    }
+    @MockitoBean
+    private StudentService studentService;
+    @MockitoBean
+    private StudentEnrollmentService studentEnrollment;
+    @MockitoBean
+    private CreateStudentAccount createStudentAccount;
+    @MockitoBean
+    private DeleteStudentAccount deleteStudentAccount;
+    @MockitoBean
+    private StudentDisenrollmentService studentDisenrollment;
 
     @Test
     @DisplayName("Debe retornar Http 201 y un estudiante, al crear el mismo y su cuenta")
@@ -247,9 +246,9 @@ public class StudentControllerTest {
         Long idCourse = 25L;
         Long idStudent = 15L;
 
-        doThrow(new NotFoundException("Curso no encontrado")).when(studentEnrollment).studentInscription(idCourse, idStudent);
+        doThrow(new NotFoundException("Curso no encontrado")).when(studentEnrollment).studentInscription(idStudent, idCourse);
 
-        mockMvc.perform(post("/students/inscription/{idCourse}/{idStudent}", idCourse, idStudent))
+        mockMvc.perform(post("/students/inscription/student/{idStudent}/course/{idCourse}", idCourse, idStudent))
                 .andExpect(status().isNotFound());
     }
 
@@ -259,7 +258,7 @@ public class StudentControllerTest {
         Long idCourse = 25L;
         Long idStudent = 15L;
 
-        mockMvc.perform(post("/students/inscription/{idCourse}/{idStudent}", idCourse, idStudent))
+        mockMvc.perform(post("/students/inscription/student/{idStudent}/course/{idCourse}", idStudent, idCourse))
                 .andExpect(status().isNoContent());
 
         verify(studentEnrollment).studentInscription(idCourse, idStudent);
@@ -273,7 +272,7 @@ public class StudentControllerTest {
 
         doThrow(new NotFoundException("Estudiante no encontrado")).when(studentDisenrollment).studentUnsubscribe(idCourse, idStudent);
 
-        mockMvc.perform(delete("/students/unsubscribe/{idCourse}/{idStudent}", idCourse, idStudent))
+        mockMvc.perform(delete("/students/unsubscribe/student/{idStudent}/course/{idCourse}", idStudent, idCourse))
                 .andExpect(status().isNotFound());
     }
 
@@ -283,7 +282,7 @@ public class StudentControllerTest {
         Long idCourse = 25L;
         Long idStudent = 15L;
 
-        mockMvc.perform(delete("/students/unsubscribe/{idCourse}/{idStudent}", idCourse, idStudent))
+        mockMvc.perform(delete("/students/unsubscribe/student/{idStudent}/course/{idCourse}", idStudent, idCourse))
                 .andExpect(status().isNoContent());
 
         verify(studentDisenrollment).studentUnsubscribe(idCourse, idStudent);

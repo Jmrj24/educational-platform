@@ -23,7 +23,6 @@ public class UserSecService implements IUserSecService {
     private final UserSecMapper userSecMapper;
     private final PasswordEncoder passwordEncoder;
 
-
     public UserSecService(UserSecRepository userSecRepository, RoleRepository roleRepository,
                           UserSecMapper userSecMapper, PasswordEncoder passwordEncoder) {
         this.userSecRepository = userSecRepository;
@@ -101,7 +100,6 @@ public class UserSecService implements IUserSecService {
     private Set<Role> findRoles(Set<Long> rolesListIds) {
         Set<Role> rolesList = new HashSet<>();
         for(Long roleId:rolesListIds) {
-
             rolesList.add(this.roleRepository.findById(roleId).orElseThrow(() -> new NotFoundException("Rol no Encontrado")));
         }
         return rolesList;

@@ -7,8 +7,9 @@ import com.example.demo.teacher.dto.TeacherUpdateDTO;
 import com.example.demo.teacher.mapper.TeacherMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,13 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class TeacherServiceTest {
-    private final TeacherRepository teacherRepository = Mockito.mock(TeacherRepository.class);
-    private final TeacherMapper teacherMapper = Mockito.mock(TeacherMapper.class);
-
-    private final TeacherService teacherService = new TeacherService(teacherRepository, teacherMapper);
-
-    private final ArgumentCaptor<Teacher> teacherCaptor = ArgumentCaptor.forClass(Teacher.class);
+    @Mock
+    private TeacherRepository teacherRepository;
+    @Mock
+    private TeacherMapper teacherMapper;
+    @InjectMocks
+    private TeacherService teacherService;
+    @Captor
+    private ArgumentCaptor<Teacher> teacherCaptor;
 
     @Test
     @DisplayName("Debe lanzar error si el mail ya existe (Validación Repetido)")
@@ -110,7 +114,7 @@ public class TeacherServiceTest {
 
     @Test
     @DisplayName("Debe lanzar una excepcion al no existir el id del profesor")
-    void findByIdTeacher_teacherExist_runException() {
+    void findByIdTeacher_teacherNoExist_runException() {
         Long id = 1L;
 
         when(teacherRepository.findById(id)).thenReturn(Optional.empty());
@@ -138,7 +142,6 @@ public class TeacherServiceTest {
         assertEquals(teacher.getName(), teacherUpdate.getName());
         assertEquals(teacher.getMail(), teacherUpdate.getMail());
         verify(teacherRepository).save(teacher);
-        verify(teacherMapper).toTeacherResponse(teacher);
         assertEquals(teacherResponseExpected, teacherResponseResult);
     }
 

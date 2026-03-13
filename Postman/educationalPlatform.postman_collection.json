@@ -438,14 +438,16 @@
               }
             },
             "url": {
-              "raw": "{{base_url}}/students/inscription/1/1",
+              "raw": "{{base_url}}/students/inscription/student/1/course/1",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "students",
                 "inscription",
+                "student",
                 "1",
+                "course",
                 "1"
               ]
             }
@@ -458,14 +460,16 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/students/unsubscribe/1/1",
+              "raw": "{{base_url}}/students/unsubscribe/student/1/course/1",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "students",
                 "unsubscribe",
+                "student",
                 "1",
+                "course",
                 "1"
               ]
             }
@@ -580,14 +584,16 @@
               }
             },
             "url": {
-              "raw": "{{base_url}}/teachers/assign/1/1",
+              "raw": "{{base_url}}/teachers/assign/teacher/1/course/1",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "teachers",
                 "assign",
+                "teacher",
                 "1",
+                "course",
                 "1"
               ]
             }
@@ -600,14 +606,16 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/teachers/unassign/1/1",
+              "raw": "{{base_url}}/teachers/unassign/teacher/1/course/1",
               "host": [
                 "{{base_url}}"
               ],
               "path": [
                 "teachers",
                 "unassign",
+                "teacher",
                 "1",
+                "course",
                 "1"
               ]
             }
@@ -715,7 +723,7 @@
     "bearer": [
       {
         "key": "token",
-        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJVc2VyUGxhdGZvcm1TZWN1cml0eSIsInN1YiI6ImFkbWluUGxhdGZvcm0iLCJhdXRob3JpdGllcyI6IkNSRUFURSxERUxFVEUsUkVBRCxST0xFX0FETUlOSVNUUkFET1IsVVBEQVRFIiwiaWF0IjoxNzcwMTIxMjkxLCJleHAiOjE3NzAxMjMwOTEsImp0aSI6ImY4N2ExNWJhLTE0OWItNDEzZC1hNzNmLTBiMzM1NzJhYjkzYyIsIm5iZiI6MTc3MDEyMTI5MX0.wodv4h7qsdxs4dxOV2ZpMLA87eycBGBUsfFZAAT-_L8",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJVc2VyUGxhdGZvcm1TZWN1cml0eSIsInN1YiI6InByb2Zlc29yRGV4dGVyIiwiYXV0aG9yaXRpZXMiOiJSRUFELFJPTEVfUFJPRkVTT1IsVVBEQVRFIiwiaWF0IjoxNzcyNzExNTg5LCJleHAiOjE3NzI3MTMzODksImp0aSI6IjBlOTYxOTgwLWJlMjgtNDE4NC04ZTNhLTI3YmZhNTk4NjMzNyIsIm5iZiI6MTc3MjcxMTU4OX0.qjNu5wAu1kT5PiXuJUloyD_-0TS4Du8ZQz_4sGOMlxk",
         "type": "string"
       }
     ]

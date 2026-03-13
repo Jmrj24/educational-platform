@@ -9,7 +9,10 @@ import com.example.demo.student.StudentRepository;
 import com.example.demo.student.StudentTestDataFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -17,11 +20,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class StudentDisenrollmentServiceTest {
-    private final CourseRepository courseRepository = Mockito.mock(CourseRepository.class);
-    private final StudentRepository studentRepository = Mockito.mock(StudentRepository.class);
-
-    private final StudentDisenrollmentService studentDisenrollmentService = new StudentDisenrollmentService(courseRepository, studentRepository);
+    @Mock
+    private CourseRepository courseRepository;
+    @Mock
+    private StudentRepository studentRepository;
+    @InjectMocks
+    private StudentDisenrollmentService studentDisenrollmentService;
 
     @Test
     @DisplayName("Elimina la suscripcion del estudiante en el curso")

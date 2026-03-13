@@ -7,9 +7,9 @@ import com.example.demo.course.mapper.CourseMapper;
 import com.example.demo.exception.NotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.AdditionalAnswers;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
@@ -17,13 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class CourseServiceTest {
-    private final CourseRepository courseRepository = Mockito.mock(CourseRepository.class);
-    private final CourseMapper courseMapper = Mockito.mock(CourseMapper.class);
+    @Mock
+    private CourseRepository courseRepository;
+    @Mock
+    private CourseMapper courseMapper;
+    @InjectMocks
+    private CourseService  courseService;
+    @Captor
+    private ArgumentCaptor<Course> courseCaptor;
 
-    private final CourseService  courseService = new CourseService(courseRepository, courseMapper);
-
-    private final ArgumentCaptor<Course> courseCaptor = ArgumentCaptor.forClass(Course.class);
     @Test
     @DisplayName("Debe guardar un curso si todo sale bien")
     void saveCourse_requestCourseValid_courseSaved() {

@@ -2,6 +2,7 @@ package com.example.demo.application.teacher;
 
 import com.example.demo.course.Course;
 import com.example.demo.course.CourseRepository;
+import com.example.demo.exception.ConflictException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.teacher.Teacher;
 import com.example.demo.teacher.TeacherRepository;
@@ -22,6 +23,10 @@ public class UnassignTeacherToCourseService {
     public void unassign(Long idCourse, Long idTeacher) {
         Course course = this.courseRepository.findById(idCourse).orElseThrow(() -> new NotFoundException("El id del Curso no existe"));
         Teacher teacher = this.teacherRepository.findById(idTeacher).orElseThrow(() -> new NotFoundException("El id del Profesor no existe"));
+
+        if((course.getTeacherCourse()!=null)&&(!course.getTeacherCourse().getId().equals(idTeacher))) {
+            throw new ConflictException("El profesor no esta asignado en este curso!");
+        }
 
         teacher.getListCourses().remove(course);
         course.setTeacherCourse(null);

@@ -13,7 +13,10 @@ import com.example.demo.userSec.dto.UserSecRequestDTO;
 import com.example.demo.userSec.dto.UserSecResponseDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,12 +27,16 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class CreateStudentAccountTest {
-    private final IStudentService studentService = Mockito.mock(IStudentService.class);
-    private final IUserSecService userSecService = Mockito.mock(IUserSecService.class);
-    private final StudentMapper studentMapper = Mockito.mock(StudentMapper.class);
-
-    private final CreateStudentAccount createStudentAccount = new CreateStudentAccount(studentService, userSecService, studentMapper);
+    @Mock
+    private IStudentService studentService;
+    @Mock
+    private IUserSecService userSecService;
+    @Mock
+    private StudentMapper studentMapper;
+    @InjectMocks
+    private CreateStudentAccount createStudentAccount;
 
     @Test
     @DisplayName("Registrar un nuevo estudiante junto con su cuenta de acceso de seguridad")

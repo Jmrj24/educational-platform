@@ -7,7 +7,10 @@ import com.example.demo.userSec.UserSec;
 import com.example.demo.userSec.UserSecRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
@@ -15,11 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class DeleteStudentAccountTest {
-    private final IStudentService studentService = Mockito.mock(IStudentService.class);
-    private final UserSecRepository userSecRepository = Mockito.mock(UserSecRepository.class);
-
-    private final DeleteStudentAccount deleteStudentAccount = new DeleteStudentAccount(studentService, userSecRepository);
+    @Mock
+    private IStudentService studentService;
+    @Mock
+    private UserSecRepository userSecRepository;
+    @InjectMocks
+    private DeleteStudentAccount deleteStudentAccount;
 
     @Test
     @DisplayName("Elimina el estudiante y su cuenta si todo sale bien")

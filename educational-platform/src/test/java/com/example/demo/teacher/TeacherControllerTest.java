@@ -2,18 +2,18 @@ package com.example.demo.teacher;
 
 import com.example.demo.application.teacher.*;
 import com.example.demo.exception.ConflictException;
-import com.example.demo.exception.GlobalExceptionHandler;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.teacher.dto.TeacherRequestDTO;
 import com.example.demo.teacher.dto.TeacherResponseDTO;
 import com.example.demo.teacher.dto.TeacherUpdateDTO;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
@@ -25,25 +25,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest(TeacherController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class TeacherControllerTest {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    private final ITeacherService teacherService = Mockito.mock(ITeacherService.class);
-    private final AssignTeacherToCourseService assignTeacherToCourse = Mockito.mock(AssignTeacherToCourseService.class);
-    private final CreateTeacherAccount createTeacherAccount = Mockito.mock(CreateTeacherAccount.class);
-    private final DeleteTeacherAccount deleteTeacherAccount = Mockito.mock(DeleteTeacherAccount.class);
-    private final UnassignTeacherToCourseService unassignTeacherToCourse = Mockito.mock(UnassignTeacherToCourseService.class);
-
-    private final TeacherController teacherController = new TeacherController(teacherService, assignTeacherToCourse, createTeacherAccount,
-            deleteTeacherAccount, unassignTeacherToCourse);
-
-    @BeforeEach
-    void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(teacherController)
-                .setControllerAdvice(new GlobalExceptionHandler())
-                .build();
-    }
+    @MockitoBean
+    private ITeacherService teacherService;
+    @MockitoBean
+    private AssignTeacherToCourseService assignTeacherToCourse;
+    @MockitoBean
+    private CreateTeacherAccount createTeacherAccount;
+    @MockitoBean
+    private DeleteTeacherAccount deleteTeacherAccount;
+    @MockitoBean
+    private UnassignTeacherToCourseService unassignTeacherToCourse;
 
     @Test
     @DisplayName("Debe retornar Http 201 y el profesor, al crear el mismo y su cuenta")
@@ -249,7 +248,7 @@ public class TeacherControllerTest {
 
         doThrow(new NotFoundException("Curso no encontrado")).when(assignTeacherToCourse).assign(idCourse, idTeacher);
 
-        mockMvc.perform(post("/teachers/assign/{idCourse}/{idTeacher}", idCourse, idTeacher))
+        mockMvc.perform(post("/teachers/assign/teacher/{idTeacher}/course/{idCourse}", idTeacher, idCourse))
                 .andExpect(status().isNotFound());
     }
 
@@ -259,7 +258,7 @@ public class TeacherControllerTest {
         Long idCourse = 25L;
         Long idTeacher = 15L;
 
-        mockMvc.perform(post("/teachers/assign/{idCourse}/{idTeacher}", idCourse, idTeacher))
+        mockMvc.perform(post("/teachers/assign/teacher/{idTeacher}/course/{idCourse}", idTeacher, idCourse))
                 .andExpect(status().isNoContent());
 
         verify(assignTeacherToCourse).assign(idCourse, idTeacher);
@@ -273,7 +272,7 @@ public class TeacherControllerTest {
 
         doThrow(new NotFoundException("Profesor no encontrado")).when(unassignTeacherToCourse).unassign(idCourse, idTeacher);
 
-        mockMvc.perform(delete("/teachers/unassign/{idCourse}/{idTeacher}", idCourse, idTeacher))
+        mockMvc.perform(delete("/teachers/unassign/teacher/{idTeacher}/course/{idCourse}", idTeacher, idCourse))
                 .andExpect(status().isNotFound());
     }
 
@@ -283,7 +282,7 @@ public class TeacherControllerTest {
         Long idCourse = 25L;
         Long idTeacher = 15L;
 
-        mockMvc.perform(delete("/teachers/unassign/{idCourse}/{idTeacher}", idCourse, idTeacher))
+        mockMvc.perform(delete("/teachers/unassign/teacher/{idTeacher}/course/{idCourse}", idTeacher, idCourse))
                 .andExpect(status().isNoContent());
 
         verify(unassignTeacherToCourse).unassign(idCourse, idTeacher);

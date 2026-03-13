@@ -184,6 +184,8 @@ Este proyecto cuenta con una suite de pruebas automatizadas que garantizan la in
 * **Inscripciones y Asignaciones:** Lógica transaccional para matriculación de estudiantes y asignación de docentes a cursos.
 * **Controladores:** Validación de contratos de API, códigos de estado HTTP y respuestas JSON.
 * **Bootstrap Inicial:** Verificación y creación automática del perfil Administrador.
+* **Tests de Integración (End-to-End):** Implementación de tests para un flujo crítico (ej: inscripción), cubriendo el camino feliz y tres escenarios de error principales.
+* **Cobertura (JaCoCo):** Alcanzado un **76% de code coverage**, asegurando la validación de la mayoría de las reglas de negocio y ramas lógicas.
 
 ⏳ **En Progreso / Próximos pasos:**
 * **Seguridad:** Implementación de tests para Dominios de Acceso (Usuarios, Roles y Permisos).

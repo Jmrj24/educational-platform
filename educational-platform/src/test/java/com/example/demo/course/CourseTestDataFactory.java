@@ -37,4 +37,12 @@ public class CourseTestDataFactory {
                 null,
                 new ArrayList<>());
     }
+
+    public static Course createCourseFromIntegration() {
+        Course course = new Course();
+        course.setName("Logica de programacion");
+        course.setDescription("aspectos basicos");
+        course.setStatus(false);
+        return course;
+    }
 }

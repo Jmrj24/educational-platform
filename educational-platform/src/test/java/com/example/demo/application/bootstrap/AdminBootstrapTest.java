@@ -11,11 +11,10 @@ import com.example.demo.userSec.UserSecRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -26,17 +25,28 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class AdminBootstrapTest {
-    private final UserSecRepository userSecRepository = Mockito.mock(UserSecRepository.class);
-    private final RoleService roleService = Mockito.mock(RoleService.class);
-    private final PermissionService permissionService = Mockito.mock(PermissionService.class);
-    private final PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
+    @Mock
+    private UserSecRepository userSecRepository;
+    @Mock
+    private RoleService roleService;
+    @Mock
+    private PermissionService permissionService;
+    @Mock
+    private PasswordEncoder passwordEncoder;
     private final String adminUsername = "admin";
     private final String adminPassword = "admin1234";
 
-    private final AdminBootstrap adminBootstrap = new AdminBootstrap(userSecRepository, roleService, permissionService, passwordEncoder, adminUsername, adminPassword);
+    private AdminBootstrap adminBootstrap;
 
-    private final ArgumentCaptor<UserSec> userSecCaptor = ArgumentCaptor.forClass(UserSec.class);
+    @BeforeEach
+    void setUp() {
+        adminBootstrap = new AdminBootstrap(userSecRepository, roleService, permissionService, passwordEncoder, adminUsername, adminPassword);
+    }
+
+    @Captor
+    private ArgumentCaptor<UserSec> userSecCaptor;
 
     @Test
     @DisplayName("Genera un usuario administrador si no existe ninguno en la BD")
@@ -75,7 +85,6 @@ public class AdminBootstrapTest {
     @Test
     @DisplayName("Genera un log de informacion si ya existe un usuario administrador")
     void run_userSecExist_logRun() throws Exception {
-
         when(userSecRepository.findUserEntityByUsername(adminUsername)).thenReturn(Optional.of(new UserSec()));
 
         adminBootstrap.run();

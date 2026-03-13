@@ -7,21 +7,25 @@ import com.example.demo.student.dto.StudentUpdateDTO;
 import com.example.demo.student.mapper.StudentMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class StudentServiceTest {
-    private final StudentRepository studentRepository = Mockito.mock(StudentRepository.class);
-    private final StudentMapper studentMapper = Mockito.mock(StudentMapper.class);
-
-    private final StudentService studentService = new StudentService(studentRepository, studentMapper);
-
-    private final ArgumentCaptor<Student> studentCaptor = ArgumentCaptor.forClass(Student.class);
+    @Mock
+    private StudentRepository studentRepository;
+    @Mock
+    private StudentMapper studentMapper;
+    @InjectMocks
+    private StudentService studentService;
+    @Captor
+    private ArgumentCaptor<Student> studentCaptor;
 
     @Test
     @DisplayName("Debe lanzar error si el mail ya existe (Validación Repetido)")
