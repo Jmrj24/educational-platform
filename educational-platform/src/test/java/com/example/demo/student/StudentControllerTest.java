@@ -224,7 +224,6 @@ public class StudentControllerTest {
         doThrow((new NotFoundException("El ID ingresado no pertenece a una cuenta registrada."))).when(deleteStudentAccount).deleteStudentAndAccount(id);
 
         mockMvc.perform(delete("/students/{id}", id))
-
                 .andExpect(status().isNotFound());
     }
 
@@ -234,7 +233,6 @@ public class StudentControllerTest {
         Long id = 1L;
 
         mockMvc.perform(delete("/students/{id}", id))
-
                 .andExpect(status().isNoContent());
 
         verify(deleteStudentAccount).deleteStudentAndAccount(id);

@@ -58,8 +58,8 @@ public class StudentTestDataFactory {
 
     public static Student createStudentFromIntegration() {
         Student student = new Student();
-        student.setName("Juan");
-        student.setMail("juan@mail.com");
+        student.setName("Maria");
+        student.setMail("maria@mail.com");
         return student;
     }
 }

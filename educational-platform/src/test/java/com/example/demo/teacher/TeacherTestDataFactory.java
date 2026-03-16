@@ -60,4 +60,12 @@ public class TeacherTestDataFactory {
                 new ArrayList<>()
         );
     }
+
+    public static Teacher createTeacherFromIntegration() {
+        Teacher teacher = new Teacher();
+        teacher.setName("Mateo");
+        teacher.setMail("mateo@mail.com");
+        teacher.setSpecialty("Matematicas");
+        return teacher;
+    }
 }

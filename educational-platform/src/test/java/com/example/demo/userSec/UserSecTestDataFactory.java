@@ -65,4 +65,17 @@ public class UserSecTestDataFactory {
                 userSec.getIdSubject()
         );
     }
+
+    public static UserSec createUserSecFromIntegration() {
+        UserSec userSec = new UserSec();
+        userSec.setUsername("JuanProfesor");
+        userSec.setPassword("1234");
+        userSec.setEnabled(true);
+        userSec.setAccountNotExpired(true);
+        userSec.setAccountNotLocked(true);
+        userSec.setCredentialNotExpired(true);
+        userSec.setSubjectType(SubjectType.PROFESOR);
+        userSec.setIdSubject(45L);
+        return userSec;
+    }
 }
