@@ -170,22 +170,64 @@ mvn clean install
 java -jar target/*.jar
 ```
 ---
-## 🧪 Testing y Calidad de Código (En Desarrollo 🚧)
+## 🧪 Testing y Calidad de Código
 
-Este proyecto cuenta con una suite de pruebas automatizadas que garantizan la integridad de los flujos críticos.
-* **Stack de Pruebas:** Implementadas con **JUnit 5** y **Mockito**, asegurando el aislamiento total mediante mocks en capas de servicios y controladores.
-* **Cobertura:** Integración con **JaCoCo** para el análisis de cobertura, asegurando que cada regla de negocio sea validada.
-* **Robustez:** Validación de contratos HTTP y manejo global de excepciones mediante `@ControllerAdvice`.
+Este proyecto cuenta con una suite de pruebas automatizadas que valida tanto la lógica de negocio como los flujos completos de la aplicación, reforzando la robustez del sistema y la consistencia de las reglas transaccionales.
 
-### 🗺️ Roadmap de Pruebas Unitarias
+---
 
-✅ **Completado (Lógica de Negocio):**
-* **Gestión de Usuarios:** Flujos completos de creación, actualización y eliminación (Estudiantes/Profesores + Sincronización de Cuentas).
-* **Inscripciones y Asignaciones:** Lógica transaccional para matriculación de estudiantes y asignación de docentes a cursos.
-* **Controladores:** Validación de contratos de API, códigos de estado HTTP y respuestas JSON.
-* **Bootstrap Inicial:** Verificación y creación automática del perfil Administrador.
-* **Tests de Integración (End-to-End):** Implementación de tests para un flujo crítico (inscripción), cubriendo el camino feliz y tres escenarios de error principales.
-* **Cobertura (JaCoCo):** Alcanzado un **76% de code coverage**, asegurando la validación de la mayoría de las reglas de negocio y ramas lógicas.
+### 🔬 Stack de Pruebas
+
+- **JUnit 5**
+- **Mockito**
+- **Spring Boot Test**
+- **JaCoCo** (análisis de cobertura)
+
+---
+
+### 🧩 Tests Unitarios
+
+Se implementaron pruebas unitarias enfocadas en el aislamiento de la lógica de negocio mediante mocks en servicios y controladores.
+
+Cobertura aplicada en:
+
+- Gestión de Usuarios (Estudiantes y Profesores)
+- Creación y sincronización automática de cuentas de acceso
+- Lógica transaccional de inscripción y asignación
+- Validación de reglas de negocio
+- Contratos HTTP (códigos de estado y estructura de respuesta JSON)
+- Bootstrap inicial del perfil Administrador
+
+---
+
+### 🔄 Tests de Integración (End-to-End)
+
+Se implementaron pruebas de integración validando el flujo completo desde el Controller hasta la base de datos, asegurando persistencia real y consistencia transaccional.
+
+Flujos cubiertos:
+
+1. ✅ Creación de Estudiante con generación automática de cuenta
+2. ✅ Creación de Profesor con generación automática de cuenta
+3. ✅ Inscripción de Estudiante en Curso
+4. ✅ Asignación de Profesor a Curso
+
+Cada flujo contempla:
+- Caso exitoso
+- Validaciones de error relevantes
+- Verificación de consistencia en base de datos
+
+---
+
+### 📊 Cobertura de Código
+
+- **80% de cobertura alcanzada con JaCoCo**
+- Validación de reglas críticas de negocio y ramas lógicas principales
+
+---
+
+### 🎯 Aprendizaje Clave
+
+La implementación de pruebas permitió detectar inconsistencias en validaciones y pequeños errores en la lógica transaccional que no eran evidentes mediante pruebas manuales, fortaleciendo el diseño y la calidad general del sistema.
 
 ---
 **Autor:** Jeferson Rosales
